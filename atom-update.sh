@@ -6,11 +6,11 @@ MASTER=`curl -s https://atom.io/releases | grep release-date | awk '{print $1}' 
 
 if [ "$MASTER" != "$CURRENT" ]; then
   echo "Downloading Update...."
-  wget https://atom.io/download/rpm -O $PKG 2>&1 /var/log/aupdater.log
+  wget https://atom.io/download/rpm -O $PKG &> /var/log/aupdater.log
   echo "Installing Update...."
-  yum localinstall -y $PKG 2>&1 /var/log/aupdater.log
+  yum localinstall -y $PKG &> /var/log/aupdater.log
   echo "Cleanup...."
-  rm -rf $PKG 2>&1 /var/log/aupdater.log
+  rm -rf $PKG &> /var/log/aupdater.log
   echo "Complete!"
 else
   echo "Atom is up to date"
