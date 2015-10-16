@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 OS=`uname -r | cut -d. -f4`
 if [[ "$OS" =~ ^fc2[2-3] ]]; then
