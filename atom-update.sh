@@ -52,7 +52,7 @@ case $1 in
     atom)
         update_atom
         ;;
-    pkg)
+    pkgs)
         update_packages
         ;;
     *)
