@@ -1,22 +1,36 @@
 #!/bin/bash
 
-OS=`uname -r | cut -d. -f4`
-if [[ "$OS" =~ ^fc2[2-3] ]]; then
-    CMD="dnf"
+UB_OS=`uname -a | awk '{print $4}' | cut -d"-" -f2`
+FED_OS=`uname -r | cut -d. -f4`
+
+if [[ "$UB_OS" == "Ubuntu"  ]]; then
+  PKG='atom.deb'
+  CURRENT=`sudo apt --installed list 2> /dev/null| grep atom | grep -v libatomic | awk '{print $2}'`
+  DOWNLOAD='deb'
+  CMD='dpkg -i'
+elif [[ "$FED_OS" =~ ^fc ]]; then
+  PKG="atom.rpm"
+  DOWNLOAD='rpm'
+  if [[ "$FED_OS" =~ ^fc2[2-3] ]]; then
+    CMD="dnf install -y"
+    CURRENT=`sudo $CMD list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
+  else
+    CMD="yum localinstall -y"
+    CURRENT=`sudo $CMD list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
+  fi
 else
-    CMD="yum"
+  echo "Unsupported Operating System"
+  exit 1
 fi
 
-update_atom() {
-    PKG='atom.rpm'
-    CURRENT=`sudo $CMD list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
-    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $1}' | head -1 | tr -d '<h2>' | tr -d 'v'`
 
+update_atom() {
+    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $1}' | head -1 | tr -d '<h2>' | tr -d 'v'`
     if [ "$MASTER" != "$CURRENT" ]; then
         echo "Downloading Update...."
-        wget https://atom.io/download/rpm -O $PKG &> ./aupdater.log
+        wget https://atom.io/download/$DOWNLOAD -O $PKG &> ./aupdater.log
         echo "Installing Update...."
-        sudo $CMD install -y $PKG &> ./aupdater.log
+        sudo $CMD $PKG &> ./aupdater.log
         echo "Cleanup...."
         rm -rf $PKG &> ./aupdater.log
         echo "Complete!"
