@@ -1,4 +1,4 @@
-atom-rpm-updater
+atom-linux-updater
 ================
 
-A simple bash script to update the Atom text editor on RPM/YUM-based Linux distributions
+A simple bash script to update the Atom text editor on Fedora and Ubuntu Linux distributions (and their derivatives)
