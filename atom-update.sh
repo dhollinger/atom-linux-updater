@@ -5,7 +5,7 @@ FED_OS=`uname -r | cut -d. -f4`
 
 if [[ "$UB_OS" == "Ubuntu"  ]]; then
   PKG='atom.deb'
-  CURRENT=`sudo apt --installed list 2> /dev/null| grep atom | grep -v libatomic | awk '{print $2}'`
+  CURRENT=`sudo apt --installed list 2> /dev/null| grep atom | grep -v libatomic | cut -d" " -f2`
   DOWNLOAD='deb'
   CMD='dpkg -i'
 elif [[ "$FED_OS" =~ ^fc ]]; then
@@ -25,7 +25,7 @@ fi
 
 
 update_atom() {
-    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $1}' | head -1 | tr -d '<h2>' | tr -d 'v'`
+    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $1}' | head -1 | cut -d">" -f2 | tr -d 'v'`
     if [ "$MASTER" != "$CURRENT" ]; then
         echo "Downloading Update...."
         wget https://atom.io/download/$DOWNLOAD -O $PKG &> ./aupdater.log
