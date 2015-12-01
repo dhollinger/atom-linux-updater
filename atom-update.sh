@@ -13,10 +13,10 @@ elif [[ "$FED_OS" =~ ^fc ]]; then
   DOWNLOAD='rpm'
   if [[ "$FED_OS" =~ ^fc2[2-3] ]]; then
     CMD="dnf install -y"
-    CURRENT=`sudo $CMD list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
+    CURRENT=`sudo dnf list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
   else
     CMD="yum localinstall -y"
-    CURRENT=`sudo $CMD list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
+    CURRENT=`sudo yum list installed | grep ^atom | awk '{print $2}' | cut -f1 -d"-"`
   fi
 else
   echo "Unsupported Operating System"
