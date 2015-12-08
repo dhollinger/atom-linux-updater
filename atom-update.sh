@@ -25,7 +25,7 @@ fi
 
 
 update_atom() {
-    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $1}' | head -1 | cut -d">" -f2 | tr -d 'v'`
+    MASTER=`curl -s https://atom.io/releases | grep release-date | grep -v beta |awk '{print $2}' | head -1 | cut -d">" -f2 | tr -d 'v'`
     if [ "$MASTER" != "$CURRENT" ]; then
         echo "Downloading Update...."
         wget https://atom.io/download/$DOWNLOAD -O $PKG &> ./aupdater.log
